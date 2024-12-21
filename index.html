@@ -1,0 +1,343 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CARPAL</title>
+    <style>
+        body {
+            background-color: #80ccfc;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 35px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        button {
+            width: 30%;
+            padding: 10px;
+            background-color: orange;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #ff7f32;
+        }
+        .message {
+            color: red;
+            text-align: center;
+        }
+        #loginForm{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 id="toggleSignUp">SIGN UP</h2>
+        <div id="signupForm">
+            <input type="text" id="name" placeholder="Name" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <input type="text" id="carNumber" placeholder="Car Number (e.g., AB12CD3456)" required>
+            <div class="button-container">
+                <button onclick="submitData()" id="submit">SUBMIT</button>
+                <button onclick="toggleForms()" id="log">LOGIN</button>
+            </div>
+        </div>
+
+        <div id="loginForm" style="display: none;">
+            <input type="email" id="loginEmail" placeholder="Email" required>
+            <input type="password" id="loginPassword" placeholder="Password" required>
+            <div class="button-container">
+                <button onclick="login()">Login</button>
+                <button onclick="toggleForms()">Back to Sign Up</button>
+            </div>
+        </div>
+
+        <div class="message" id="message"></div>
+    </div>
+
+    <script type="module">
+       
+    // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyBBqxq8XJ67yVT-mhZ5gFDPmIH3AFI65Yc",
+    authDomain: "finalcarpal.firebaseapp.com",
+    projectId: "finalcarpal",
+    storageBucket: "finalcarpal.firebasestorage.app",
+    messagingSenderId: "241858494025",
+    appId: "1:241858494025:web:ebfa95186d2e1f26860998"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+
+
+        
+        const carRegex = /^[A-Z]{2}[0-9]{2}[A-HJ-NP-Z]{1,2}[0-9]{4}$/;
+
+        function toggleForms() {
+            const signupForm = document.getElementById("signupForm");
+            const loginForm = document.getElementById("loginForm");
+            if (signupForm.style.display === "none") {
+                signupForm.style.display = "block";
+                loginForm.style.display = "none";
+            } else {
+                signupForm.style.display = "none";
+                loginForm.style.display = "block";
+                const head=require('./login.js');
+            }
+            document.getElementById("message").textContent = ""; 
+        }
+        
+        const sub=document.getElementById("submit");
+        sub.addEventListener("click", function (event){
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const carNumber = document.getElementById("carNumber").value;
+            event.preventDefault();
+
+            const auth = getAuth();
+createUserWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    // Signed up 
+    const user = userCredential.user;
+    alert("Creating your account...")
+    windows.location.href= "carpool.html";
+    // ...
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    alert(errorMessage);
+    // ..
+  });
+        })
+        function submitData() {
+            
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const carNumber = document.getElementById("carNumber").value;
+            if (!carRegex.test(carNumber)) {
+                alert("PLEASE ENTER A VALID CAR NUMBER!");
+                return;
+            }
+
+            const checkEmail=localStorage.getItem('email');
+            if(email==checkEmail){
+                document.getElementById("message").textContent = "You are already a CarPal, please Login";
+            }
+
+            localStorage.setItem('name', name);
+            localStorage.setItem('email', email);
+            localStorage.setItem('password', password);
+            localStorage.setItem('carNumber', carNumber);
+
+            alert("Your data has been saved!");
+            window.location.href = "carpool.html";  
+        }
+
+        function login() {
+            const email = document.getElementById("loginEmail").value;
+            const password = document.getElementById("loginPassword").value;
+            
+            const storedEmail = localStorage.getItem('email');
+            const storedPassword = localStorage.getItem('password');
+
+            if (email === storedEmail && password === storedPassword) {
+                window.location.href = "carpool.html";  
+            } else {
+                document.getElementById("message").textContent = "Try again, email or password is incorrect!";
+            }
+        }
+    </script>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CARPAL</title>
+    <style>
+        body {
+            background-color: #80ccfc;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 35px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        button {
+            width: 30%;
+            padding: 10px;
+            background-color: orange;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #ff7f32;
+        }
+        .message {
+            color: red;
+            text-align: center;
+        }
+        #loginForm {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 id="toggleSignUp">SIGN UP</h2>
+        <div id="signupForm">
+            <input type="text" id="name" placeholder="Name" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <input type="text" id="carNumber" placeholder="Car Number (e.g., AB12CD3456)" required>
+            <div class="button-container">
+                <button id="submit">SUBMIT</button>
+                <button id="toggleForms">LOGIN</button>
+            </div>
+        </div>
+
+        <div id="loginForm" style="display: none;">
+            <input type="email" id="loginEmail" placeholder="Email" required>
+            <input type="password" id="loginPassword" placeholder="Password" required>
+            <div class="button-container">
+                <button id="loginButton">Login</button>
+                <button id="toggleFormsBack">Back to Sign Up</button>
+            </div>
+        </div>
+
+        <div class="message" id="message"></div>
+    </div>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBBqxq8XJ67yVT-mhZ5gFDPmIH3AFI65Yc",
+            authDomain: "finalcarpal.firebaseapp.com",
+            projectId: "finalcarpal",
+            storageBucket: "finalcarpal.firebasestorage.app",
+            messagingSenderId: "241858494025",
+            appId: "1:241858494025:web:ebfa95186d2e1f26860998"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+
+        const carRegex = /^[A-Z]{2}[0-9]{2}[A-HJ-NP-Z]{1,2}[0-9]{4}$/;
+
+        function toggleForms() {
+            const signupForm = document.getElementById("signupForm");
+            const loginForm = document.getElementById("loginForm");
+            if (signupForm.style.display === "none") {
+                signupForm.style.display = "block";
+                loginForm.style.display = "none";
+            } else {
+                signupForm.style.display = "none";
+                loginForm.style.display = "block";
+            }
+            document.getElementById("message").textContent = ""; 
+        }
+
+        document.getElementById("submit").addEventListener("click", function (event) {
+            event.preventDefault();
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const carNumber = document.getElementById("carNumber").value;
+
+            if (!carRegex.test(carNumber)) {
+                alert("PLEASE ENTER A VALID CAR NUMBER!");
+                return;
+            }
+
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    alert("Creating your account...");
+                    window.location.href = "carpool.html";
+                })
+                .catch((error) => {
+                    document.getElementById("message").textContent = error.message;
+                });
+        });
+
+        document.getElementById("loginButton").addEventListener("click", function (event) {
+            event.preventDefault();
+            const email = document.getElementById("loginEmail").value;
+            const password = document.getElementById("loginPassword").value;
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    window.location.href = "carpool.html";
+                })
+                .catch((error) => {
+                    document.getElementById("message").textContent = error.message;
+                });
+        });
+
+        document.getElementById("toggleForms").addEventListener("click", toggleForms);
+        document.getElementById("toggleFormsBack").addEventListener("click", toggleForms);
+    </script>
+</body>
+</html>

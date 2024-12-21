@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CarPal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #87CEEB;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .container {
+            text-align: center;
+        }
+        .profile {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            cursor: pointer;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 5;
+        }
+        .car-icon {
+            font-size: 50px;
+        }
+        button {
+            background-color: orange;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin: 10px;
+            border-radius: 10px;
+        }
+        .input-box {
+            background-color: orange;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+        .input-box input {
+            margin: 5px;
+            padding: 5px;
+            border-radius: 10px;
+        }
+        .light-blue {
+            background-color: #87CEEB;
+            color: black;
+        }
+        #carimg{
+            height:100px;
+        } 
+        #carpal{
+            font-family:'Times New Roman', Times, serif;
+            font-size: 60px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="profile" onclick="showProfile()">
+        <img src="profile-icon.png" alt="Profile" width="40">
+    </div>
+<h1 ID="carpal">CARPAL</h1>
+    <div class="modal-overlay" onclick="closeProfile()"></div>
+    <div class="modal" id="profileModal">
+        <h2>User Profile</h2>
+        <p>Name: John Doe</p>
+        <p>Car Number: XYZ 1234</p>
+        <button onclick="closeProfile()">Close</button>
+    </div>
+
+    <div class="container">
+        <div class="car-icon">
+            <img src="car.png" alt="car image" id="carimg">
+        </div>
+        <h1>LET'S CARPOOL</h1>
+        <button onclick="useYourCar()">USE YOUR CAR</button>
+        <button onclick="useElsesCar()">USE ELSE'S CAR</button>
+
+        <div class="input-box">
+            <div>
+                <label>START LOCATION:</label>
+                <button class="light-blue" onclick="fetchLocation()">FETCH YOUR LOCATION</button>
+            </div>
+            <div>
+                <label>COORDINATES:</label>
+                <input type="text" id="latitude" placeholder="Enter Latitude">
+                <input type="text" id="longitude" placeholder="Enter Longitude">
+                <label>END LOCATION:</label>
+                <input type="text" id="latitude" placeholder="Enter Latitude">
+                <input type="text" id="longitude" placeholder="Enter Longitude">
+            </div>
+        </div>
+
+        <button onclick="findNearbyPeople()">FIND NEARBY PEOPLE</button>
+    </div>
+
+    <script>
+        function showProfile() {
+            document.getElementById('profileModal').style.display = 'block';
+            document.querySelector('.modal-overlay').style.display = 'block';
+        }
+
+        function closeProfile() {
+            document.getElementById('profileModal').style.display = 'none';
+            document.querySelector('.modal-overlay').style.display = 'none';
+        }
+
+        function fetchLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    document.getElementById('latitude').value = position.coords.latitude;
+                    document.getElementById('longitude').value = position.coords.longitude;
+                });
+            } else {
+                alert("Geolocation is not supported by your browser.");
+            }
+        }
+
+        function findNearbyPeople() {
+            const userLat = parseFloat(document.getElementById('latitude').value);
+            const userLon = parseFloat(document.getElementById('longitude').value);
+
+            
+            const nearbyLat = userLat + 0.01; 
+            const nearbyLon = userLon + 0.01;
+
+            const distance = calculateDistance(userLat, userLon, nearbyLat, nearbyLon);
+
+            if (distance <= 2) {
+                alert("Nearby person found!");
+                window.location.href = "congo.html";
+            } else {
+                alert("No nearby people found.");
+            }
+        }
+
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; 
+            const dLat = (lat2 - lat1) * (Math.PI / 180);
+            const dLon = (lon2 - lon1) * (Math.PI / 180);
+            const a =
+                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(lat1 * (Math.PI / 180)) *
+                    Math.cos(lat2 * (Math.PI / 180)) *
+                    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return R * c; 
+        }
+
+        function useYourCar() {
+            alert("You chose to use your car.");
+        }
+
+        function useElsesCar() {
+            alert("You chose to use someone else's car.");
+        }
+    </script>
+</body>
+</html>
